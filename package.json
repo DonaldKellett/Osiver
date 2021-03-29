@@ -1,0 +1,44 @@
+{
+  "name": "Osiv",
+  "version": "0.1.1",
+  "description": "Minimal example of authentication server with two tiers of users",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "tap test/**/*.test.js",
+    "start": "fastify start -a 0.0.0.0 -l info app.js",
+    "dev": "fastify start -w -l info -P app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DonaldKellett/Osiv.git"
+  },
+  "keywords": [
+    "nodejs",
+    "REST",
+    "mysql"
+  ],
+  "author": "Donald Sebastian Leung",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/DonaldKellett/Osiv/issues"
+  },
+  "homepage": "https://github.com/DonaldKellett/Osiv#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "fastify": "^3.0.0",
+    "fastify-autoload": "^3.3.1",
+    "fastify-cli": "^2.9.1",
+    "fastify-plugin": "^3.0.0",
+    "fastify-sensible": "^3.1.0",
+    "fluent-json-schema": "^2.0.4",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "mysql-await": "^2.1.6"
+  },
+  "devDependencies": {
+    "tap": "^14.11.0"
+  }
+}
