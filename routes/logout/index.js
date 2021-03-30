@@ -24,9 +24,9 @@ module.exports = async function (fastify, opts) {
 	return reply.status(400).send({ message: 'Username supplied in deserialized token must be a valid Linux username' })
       let connection = mysql.createConnection({
         host: config.DB_HOST,
-	user: 'osiv',
+	user: 'osiver',
 	password: config.DB_PW,
-	database: 'osiv'
+	database: 'osiver'
       })
       let users = await connection.awaitQuery(`SELECT * FROM Accounts WHERE username = ${escape(username)}`)
       if (users.length === 0)

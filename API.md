@@ -1,10 +1,10 @@
-# Osiv API
+# Osiver API
 
-This document defines the Osiv API. An HTTP(S) server conforming to the API by exposing the endpoints defined below with the documented behavior is said to be Osiv-compliant.
+This document defines the Osiver API. An HTTP(S) server conforming to the API by exposing the endpoints defined below with the documented behavior is said to be Osiver-compliant.
 
 Note that all responses below are assumed to be JSON unless otherwise specified.
 
-API version: `0.1.1`
+API version: `0.1.0`
 
 ## Server Metadata
 
@@ -18,8 +18,8 @@ It should always return a `200 OK` status code, unless there is an internal serv
 
 On `200 OK`, the server should return a JSON object with the following fields:
 
-- `"name"`: The name of the server. Should be `"Osiv"`
-- `"version"`: The version of the Osiv API that the server adheres to. Should be a SemVer compliant version number, e.g. `"0.1.0"`
+- `"name"`: The name of the server. Should be `"Osiver"`
+- `"version"`: The version of the Osiver API that the server adheres to. Should be a SemVer compliant version number, e.g. `"0.1.0"`
 - `"timeout"`: Timeout for account logins, in seconds. E.g. if a login timeouts after 24 hours, the value should be `86400`
 
 ## Account creation and deletion

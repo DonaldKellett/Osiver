@@ -1,6 +1,6 @@
 {
-  "name": "Osiv",
-  "version": "0.1.1",
+  "name": "Osiver",
+  "version": "0.1.0",
   "description": "Minimal example of authentication server with two tiers of users",
   "main": "app.js",
   "directories": {
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DonaldKellett/Osiv.git"
+    "url": "git+https://github.com/DonaldKellett/Osiver.git"
   },
   "keywords": [
     "nodejs",
@@ -23,9 +23,9 @@
   "author": "Donald Sebastian Leung",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/DonaldKellett/Osiv/issues"
+    "url": "https://github.com/DonaldKellett/Osiver/issues"
   },
-  "homepage": "https://github.com/DonaldKellett/Osiv#readme",
+  "homepage": "https://github.com/DonaldKellett/Osiver#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "fastify": "^3.0.0",

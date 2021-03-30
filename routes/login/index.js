@@ -23,9 +23,9 @@ module.exports = async function (fastify, opts) {
     try {
       let connection = mysql.createConnection({
         host: config.DB_HOST,
-        user: 'osiv',
+        user: 'osiver',
         password: config.DB_PW,
-        database: 'osiv'
+        database: 'osiver'
       })
       let users = await connection.awaitQuery(`SELECT * FROM Accounts WHERE username = ${escape(username)}`)
       if (users.length === 0)

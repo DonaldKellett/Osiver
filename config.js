@@ -3,23 +3,23 @@
 const path = require('path')
 const fs = require('fs')
 
-const OSIV_CONF_BASE = process.env.OSIV_CONF_BASE || path.join(__dirname, 'config')
+const OSIVER_CONF_BASE = process.env.OSIVER_CONF_BASE || path.join(__dirname, 'config')
 try {
-  const NAME = 'Osiv'
-  const VERSION = '0.1.1'
-  const TIMEOUT = +fs.readFileSync(path.join(OSIV_CONF_BASE, 'timeout'))
+  const NAME = 'Osiver'
+  const VERSION = '0.1.0'
+  const TIMEOUT = +fs.readFileSync(path.join(OSIVER_CONF_BASE, 'timeout'))
     .toString()
     .slice(0, -1)
-  const DB_HOST = fs.readFileSync(path.join(OSIV_CONF_BASE, 'db-host'))
+  const DB_HOST = fs.readFileSync(path.join(OSIVER_CONF_BASE, 'db-host'))
     .toString()
     .slice(0, -1)
-  const DB_PW = fs.readFileSync(path.join(OSIV_CONF_BASE, 'db-pw'))
+  const DB_PW = fs.readFileSync(path.join(OSIVER_CONF_BASE, 'db-pw'))
     .toString()
     .slice(0, -1)
-  const MASTER_PW = fs.readFileSync(path.join(OSIV_CONF_BASE, 'master-pw'))
+  const MASTER_PW = fs.readFileSync(path.join(OSIVER_CONF_BASE, 'master-pw'))
     .toString()
     .slice(0, -1)
-  const JWT_SECRET = fs.readFileSync(path.join(OSIV_CONF_BASE, 'jwt-secret'))
+  const JWT_SECRET = fs.readFileSync(path.join(OSIVER_CONF_BASE, 'jwt-secret'))
     .toString()
     .slice(0, -1)
   const VALID_USERNAME = /^[a-z_]([a-z0-9_-]{0,31}|[a-z0-9_-]{0,30}\$)$/
