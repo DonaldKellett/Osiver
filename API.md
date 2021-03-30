@@ -270,3 +270,140 @@ The server should respond with a JSON payload containing the following fields:
 Any other user error. The server should respond with a JSON payload containing the following fields:
 
 - `"message"`: A short description of the error, e.g. `"Unknown user error"`
+
+## Question Sets
+
+### `POST /set/create`
+
+Create a question set with the provided contents. This is a privileged operation.
+
+A valid request to this endpoint shall include a JSON payload with the following fields:
+
+- `"token"`: The token associated with the current login session, e.g. `"12345678"`
+- `"graded"`: Whether the question set to be created is graded
+- `"deadline"`: A date string in `yyyy-mm-dd` format indicating when the question set is due, e.g. `"2021-03-30"`. Only required when the question set is graded; otherwise, this field is ignored
+- `"timeLimit"`: A whole number indicating the time limit for the question set in seconds, e.g. `300` for 5 minutes
+- `"questionSet"`: The contents of the question set. This should be an object with the following fields:
+  - `"title"`: A title describing the nature of the question set, e.g. `"GNU/Linux trivia"`
+  - `"description"`: A longer description of what the question set is about, e.g. `"A sample problem set on fun facts about GNU/Linux, used for demonstrating the app only"`
+  - `"problems"`: A non-empty array of objects, each with the following fields:
+    - `"question"`: The problem statement, e.g. `"What is Linux?"`
+    - `"answers"`: An array of length 4 where each element is a string representing a possible answer to the question, e.g. `["An operating system kernel", "A fully functioning operating system", "A brand of potato chips", "A top secret project under development by Microsoft"]`. The first item in the array is taken as the correct answer
+
+The server may respond with any of the following status codes, or a 5xx status code in case of a server error:
+
+- `201 Created`
+- `400 Bad Request`
+- `403 Forbidden`
+- `404 Not Found`
+
+#### `201 Created`
+
+The question set has been successfully created. The server should return a JSON payload but no fields are required, e.g. `{}` is a valid payload.
+
+#### `400 Bad Request`
+
+The payload associated with the POST request was malformed. The server should return a JSON payload containing the following fields:
+
+- `"message"`: A short description of what caused the error, e.g. `"The provided date was invalid"`
+
+#### `403 Forbidden`
+
+The payload associated with the POST request was valid but the user requesting the operation does not have sufficient privileges. It is acceptable to return `404 Not Found` in place of this status code to conceal information from potential attackers.
+
+The server should return a JSON payload containing the following fields:
+
+- `"message"`: A short description of what caused the error, e.g. `"Students are not allowed to create their own question sets"`
+
+#### `404 Not Found`
+
+Any other user error. The server should return a JSON payload containing the following fields:
+
+- `"message"`: A short description of what caused the error, e.g. `"The requested resource does not exist"`
+
+### `GET /set/delete`
+
+Delete the selected question set and all its associated data. This is a privileged operation. Note that a question set can only be deleted by its owner, i.e. the privileged user who created it.
+
+The server expects the following query string parameters when this endpoint is used:
+
+- `token`: The login token associated with the current session, e.g. `12345678`
+- `id`: The ID number associated with the set to be deleted, e.g. `17`
+
+The server may return any of the following status codes or 5xx on error:
+
+- `204 No Content`
+- `400 Bad Request`
+- `403 Forbidden`
+- `404 Not Found`
+
+#### `204 No Content`
+
+The question set and all its associated data have been successfully deleted. No JSON payload is necessary.
+
+#### `400 Bad Request`
+
+The request was malformed, e.g. some parameters were missing. The server should respond with a JSON payload containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The provided id parameter should be a valid whole number"`
+
+#### `403 Forbidden`
+
+The user requesting the operation does not have sufficient privileges, or the privileged user is not the owner of the question set. It is acceptable to respond with `404 Not Found` instead in this scenario to conceal information from potential attackers.
+
+The server should respond with a JSON payload containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"Students are not allowed to delete question sets"`
+
+#### `404 Not Found`
+
+Any other user error. The server should respond with a JSON payload containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The question set with the provided ID number was not found, or you do not have the privilege to delete this problem set, or you cannot delete this problem set as you are not the owner"`
+
+### `POST /set/modify`
+
+Update various metadata for the question set. This is a privileged operation and can only be performed by the owner of the question set. Also, only the following types of modification can be performed:
+
+- Changing a graded assignment to an ungraded one
+- Extending the deadline of a graded assignment
+
+The rationale: Any other type of modification would lead to unfairness among students or change the meaning of existing student grades. 
+
+The JSON payload associated with this request should contain the following fields:
+
+- `"token"`: The login token associated with the current session, e.g. `"12345678"`
+- `"id"`: The ID number associated with the question set, e.g. `17`
+- `"changeToUngraded"`: A boolean value indicating whether the graded assignment should be changed to ungraded
+- `"newDeadline"`: The new deadline for the graded assignment as a string in `yyyy-mm-dd` format, e.g. `"2021-12-31"`. This should not be earlier than the previous deadline. Ignored if `"changeToUngraded"` is `true`.
+
+The server may respond with any of the following status codes or 5xx on error:
+
+- `200 OK`
+- `400 Bad Request`
+- `403 Forbidden`
+- `404 Not Found`
+
+#### `200 OK`
+
+The modification was successfully performed. A JSON payload should be returned but no fields are necessary, i.e. `{}` is valid.
+
+#### `400 Bad Request`
+
+The request was malformed. The server should respond with a JSON payload containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The changeToUngraded field is missing"`
+
+#### `403 Forbidden`
+
+The request is well-defined but the user does not have sufficient privileges, is not the owner of the question set or attempted to perform an invalid operation, e.g. trying to modify an ungraded assignment. It is acceptable to return `404 Not Found` instead in this case to conceal sensitive information from potential attackers.
+
+The server should respond with a JSON payload containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"Attempted to modify an ungraded assignment"`
+
+#### `404 Not Found`
+
+Any other user error. The server should return a JSON payload with the following fields:
+
+- `"message"`: A short description of the error, e.g. `"Question set not found, or insufficient privileges, or invalid operation on question set"`
