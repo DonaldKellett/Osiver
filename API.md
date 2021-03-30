@@ -64,7 +64,7 @@ On `401 Unauthorized`, a JSON object should be returned with the following field
 
 ### `POST /delete`
 
-Deletes the account with the given username provided that the action is authorized with the user's password OR the master password. In a valid request to this endpoint, the user's password and master password should NOT be simultaneously provided.
+Deletes the account with the given username and all associated data provided that the action is authorized with the user's password OR the master password. In a valid request to this endpoint, the user's password and master password should NOT be simultaneously provided.
 
 The server expects JSON data containing the following fields:
 
@@ -81,7 +81,7 @@ This endpoint may return any of the following status codes and only these status
 
 #### `204 No Content`
 
-The account has been successfully deleted. No JSON payload is required.
+The account and all associated data have been successfully deleted. No JSON payload is required.
 
 #### `400 Bad Request`
 
@@ -236,7 +236,7 @@ Any other error caused by the user. The server should reply with a JSON payload 
 
 ### `GET /profile`
 
-Retrieve information about the user (their profile). Since user information is considered private, a logged in user can only view their own profile.
+Retrieve information about the user (their profile). Since user information is considered private, a logged in user should only be able to view their own profile directly.
 
 The server expects the following query parameters:
 

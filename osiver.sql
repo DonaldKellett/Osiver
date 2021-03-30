@@ -11,3 +11,16 @@ CREATE TABLE Accounts (
   prettyName VARCHAR(1024),
   privileged BOOL
 );
+CREATE TABLE QuestionSets (
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  teacherId INTEGER,
+  graded BOOL,
+  deadline DATE,
+  timeLimit INTEGER
+);
+CREATE TABLE Scores (
+  id INTEGER PRIMARY KEY AUTO_INCREMENT,
+  studentId INTEGER,
+  questionSetId INTEGER,
+  percentage INTEGER
+);
