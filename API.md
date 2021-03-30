@@ -22,7 +22,7 @@ On `200 OK`, the server should return a JSON object with the following fields:
 - `"version"`: The version of the Osiver API that the server adheres to. Should be a SemVer compliant version number, e.g. `"0.1.0"`
 - `"timeout"`: Timeout for account logins, in seconds. E.g. if a login timeouts after 24 hours, the value should be `86400`
 
-## Account creation and deletion
+## Account Management
 
 ### `POST /signup`
 
@@ -105,8 +105,6 @@ The server should respond with a JSON payload containing the following fields:
 
 - `"message"`: A short human-readable description of the user-invoked error, e.g. `"The username could not be found or the supplied password is incorrect."`
 
-## Account modification
-
 ### `POST /reset`
 
 Reset the password for the account with the specified username provided that the action is authorized by the user's old password OR the master password. In a valid request to this endpoint, the user's old password and the master password should NOT appear simultaneously.
@@ -150,8 +148,6 @@ The provided username did not match any account. It is acceptable to return this
 The server should respond with a JSON payload containing the following fields:
 
 - `"message"`: A short description of the error, e.g. `"The account does not exist or the password credentials you provided were incorrect."`
-
-## Account login and logout
 
 ### `POST /login`
 
@@ -231,8 +227,6 @@ The server should reply with a JSON payload containing the following fields:
 Any other error caused by the user. The server should reply with a JSON payload containing the following fields:
 
 - `"message"`: The reason for the error, e.g. `"Unknown user error."`
-
-## Account actions
 
 ### `GET /profile`
 
