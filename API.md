@@ -271,6 +271,48 @@ Any other user error. The server should respond with a JSON payload containing t
 
 - `"message"`: A short description of the error, e.g. `"Unknown user error"`
 
+### `GET /users`
+
+Fetch metadata on all unprivileged users. This is a privileged operation.
+
+The server expects the following GET parameters:
+
+- `token`: The login token associated with the current session, e.g. `12345678`
+
+The server may return any of the following status codes or 5xx on error:
+
+- `200 OK`
+- `400 Bad Request`
+- `403 Forbidden`
+- `404 Not Found`
+
+#### `200 OK`
+
+The requested operation was successful. An array of objects is returned each consisting of the following fields:
+
+- `"id"`: The ID associated with the unprivileged user, e.g. `17`
+- `"prettyName"`: The human-readable name for the unprivileged user, e.g. `"John Doe"`
+
+#### `400 Bad Request`
+
+The request was malformed. A JSON payload is returned with the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The login token is invalid"`
+
+#### `403 Forbidden`
+
+An unprivileged user attempted the operation. It is acceptable to return `404 Not Found` instead in this case to conceal sensitive information from potential attackers.
+
+A JSON payload is returned with the following fields:
+
+- `"message"`: A short description of the error, e.g. `"Students cannot view details of other students"`
+
+#### `404 Not Found`
+
+Any other user error. A JSON payload is returned with the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The requested resource was not found"`
+
 ## Question Sets
 
 ### `POST /set/create`
