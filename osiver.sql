@@ -14,6 +14,7 @@ CREATE TABLE Accounts (
 CREATE TABLE QuestionSets (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   teacherId INTEGER,
+  created DATE,
   graded BOOL,
   deadline DATE,
   timeLimit INTEGER
@@ -21,6 +22,7 @@ CREATE TABLE QuestionSets (
 CREATE TABLE Scores (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   studentId INTEGER,
+  submitted DATE,
   questionSetId INTEGER,
   percentage INTEGER
 );

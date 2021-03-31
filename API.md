@@ -428,6 +428,7 @@ The server may return any of the following status codes or 5xx on error:
 The operation was successful. The server should return an array of objects, each containing the following fields:
 
 - `"id"`: The ID number associated with the question set, e.g. `17`
+- `"created"`: The date at which the question set was created in `yyyy-mm-dd` format, e.g. `"2021-03-31"`
 - `"graded"`: A boolean value indicating whether the question set is graded
 - `"deadline"`: The deadline for the question set in `yyyy-mm-dd` format if the set is graded, e.g. `"2021-12-31"`. This field is only present for graded question sets
 - `"timeLimit"`: The time limit for the question set in seconds, e.g. `300`
@@ -473,6 +474,7 @@ The requested operation was successful. The server returns an array of objects, 
 
 - `"id"`: The ID number associated with the question set, e.g. `17`
 - `"owner"`: The human-readable name of the privileged user owning this question set, e.g. `"John Doe"`
+- `"created"`: The date at which the question set was created in `yyyy-mm-dd` format, e.g. `"2021-03-31"`
 - `"graded"`: A boolean value indicating whether the question set is graded
 - `"deadline"`: The deadline for the question set in `yyyy-mm-dd` format if the set is graded, e.g. `"2021-12-31"`. This field is only present for graded question sets
 - `"timeLimit"`: The time limit for the question set in seconds, e.g. `300`
