@@ -428,6 +428,7 @@ The server may return any of the following status codes or 5xx on error:
 The operation was successful. The server should return an array of objects, each containing the following fields:
 
 - `"id"`: The ID number associated with the question set, e.g. `17`
+- `"title"`: The title associated with the question set, e.g. `"GNU/Linux trivia"`
 - `"created"`: The date at which the question set was created in `yyyy-mm-dd` format, e.g. `"2021-03-31"`
 - `"graded"`: A boolean value indicating whether the question set is graded
 - `"deadline"`: The deadline for the question set in `yyyy-mm-dd` format if the set is graded, e.g. `"2021-12-31"`. This field is only present for graded question sets
@@ -473,6 +474,8 @@ The server may return any of the following status codes or 5xx on error:
 The requested operation was successful. The server returns an array of objects, each containing the following fields:
 
 - `"id"`: The ID number associated with the question set, e.g. `17`
+- `"title"`: The title of the question set, e.g. `"GNU/Linux trivia"`
+- `"ownerId"`: The ID of the privileged user owning this question set, e.g. `33`
 - `"owner"`: The human-readable name of the privileged user owning this question set, e.g. `"John Doe"`
 - `"created"`: The date at which the question set was created in `yyyy-mm-dd` format, e.g. `"2021-03-31"`
 - `"graded"`: A boolean value indicating whether the question set is graded
@@ -657,6 +660,7 @@ The server may return any of the following status codes, or 5xx on error:
 The requested operation was successful. An array of length at most 3 is returned consisting of objects each containing the following fields:
 
 - `"id"`: The ID associated with the score entry, e.g. `24`
+- `"studentId"`: The ID of the student associated with the score entry, e.g. `24`
 - `"studentName"`: The human-readable name of the student associated with the score entry, e.g. `"John Doe"`
 - `"submitted"`: The date at which the score was submitted in `yyyy-mm-dd` format, e.g. `"2021-04-01"`
 - `"percentage"`: The score as a percentage rounded to the nearest integer, e.g. `75`
