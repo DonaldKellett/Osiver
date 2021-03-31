@@ -309,7 +309,7 @@ The payload associated with the POST request was malformed. The server should re
 
 #### `403 Forbidden`
 
-The payload associated with the POST request was valid but the user requesting the operation does not have sufficient privileges. It is acceptable to return `404 Not Found` in place of this status code to conceal information from potential attackers.
+The payload associated with the POST request was valid but the user requesting the operation does not have sufficient privileges. It is acceptable to return `404 Not Found` in place of this status code to conceal sensitive information from potential attackers.
 
 The server should return a JSON payload containing the following fields:
 
@@ -321,14 +321,14 @@ Any other user error. The server should return a JSON payload containing the fol
 
 - `"message"`: A short description of what caused the error, e.g. `"The requested resource does not exist"`
 
-### `GET /set/delete`
+### `POST /set/delete`
 
 Delete the selected question set and all its associated data. This is a privileged operation. Note that a question set can only be deleted by its owner, i.e. the privileged user who created it.
 
-The server expects the following query string parameters when this endpoint is used:
+A valid request to this endpoint should contain a JSON payload with the following fields:
 
-- `token`: The login token associated with the current session, e.g. `12345678`
-- `id`: The ID number associated with the set to be deleted, e.g. `17`
+- `"token"`: The login token associated with the current session, e.g. `"12345678"`
+- `"id"`: The ID number associated with the set to be deleted, e.g. `17`
 
 The server may return any of the following status codes or 5xx on error:
 
@@ -343,13 +343,13 @@ The question set and all its associated data have been successfully deleted. No 
 
 #### `400 Bad Request`
 
-The request was malformed, e.g. some parameters were missing. The server should respond with a JSON payload containing the following fields:
+The request was malformed, e.g. some fields were missing. The server should respond with a JSON payload containing the following fields:
 
-- `"message"`: A short description of the error, e.g. `"The provided id parameter should be a valid whole number"`
+- `"message"`: A short description of the error, e.g. `"The provided ID should be a number"`
 
 #### `403 Forbidden`
 
-The user requesting the operation does not have sufficient privileges, or the privileged user is not the owner of the question set. It is acceptable to respond with `404 Not Found` instead in this scenario to conceal information from potential attackers.
+The user requesting the operation does not have sufficient privileges, or the privileged user is not the owner of the question set. It is acceptable to respond with `404 Not Found` instead in this scenario to conceal sensitive information from potential attackers.
 
 The server should respond with a JSON payload containing the following fields:
 
@@ -359,7 +359,7 @@ The server should respond with a JSON payload containing the following fields:
 
 Any other user error. The server should respond with a JSON payload containing the following fields:
 
-- `"message"`: A short description of the error, e.g. `"The question set with the provided ID number was not found, or you do not have the privilege to delete this problem set, or you cannot delete this problem set as you are not the owner"`
+- `"message"`: A short description of the error, e.g. `"The question set with the provided ID was not found, you do not have the privilege to delete this problem set or you cannot delete this problem set as you are not its owner"`
 
 ### `POST /set/modify`
 
