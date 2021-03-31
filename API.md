@@ -547,3 +547,49 @@ The server should return a JSON payload containing the following fields:
 Any other user error. The server should return a JSON payload containing the following fields:
 
 - `"message"`: A short description of the error, e.g. `"The requested resource was not found"`
+
+## Scores
+
+### `POST /score/submit`
+
+Submit a score (as a percentage rounded to the nearest integer) for the logged in user associated with a question set. This operation can only be performed by an unprivileged user. Furthermore, this endpoint fails if:
+
+- There is already a score associated with the graded question set
+- The score was submitted past the deadline of the graded question set
+
+The server expects a JSON payload containing the following fields:
+
+- `"token"`: The login token associated with the current session, e.g. `"12345678"`
+- `"questionSetId"`: The ID of the question set for which the score is associated with, e.g. `17`
+- `"percentage"`: The score obtained as a percentage rounded to the nearest integer, e.g. `75`
+
+The server may respond with any of the following status codes or 5xx on error:
+
+- `201 Created`
+- `400 Bad Request`
+- `403 Forbidden`
+- `404 Not Found`
+
+#### `201 Created`
+
+The score was successfully recorded in the server. A JSON payload should be returned but no fields are mandatory, i.e. `{}` is valid.
+
+#### `400 Bad Request`
+
+The request was malformed, e.g. the given percentage was not a whole number between `0` and `100` inclusive. A JSON payload should be returned with the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The provided percentage must be a whole number between 0 and 100 inclusive"`
+
+#### `403 Forbidden`
+
+A privileged user attempted the operation, the user attempted to submit a score to a graded question set which already has a score associated with it, or the user attempted to submit a score to a graded question set past its deadline. It is acceptable to return `404 Not Found` instead in this case to conceal sensitive information from potential attackers.
+
+A JSON payload should be returned with the following fields:
+
+- `"message"`: A short description of the error, e.g. `"Cannot submit score to graded question set past its deadline"`
+
+#### `404 Not Found`
+
+Any other user error. A JSON payload should be returned with the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The requested resource was not found"`
