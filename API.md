@@ -451,3 +451,48 @@ The server should return a JSON payload containing the following fields:
 Any other user error. The server should return a JSON payload containing the following fields:
 
 - `"message"`: A short description of the error, e.g. `"The requested resource was not found"`
+
+### `GET /set/browse`
+
+Fetch the metadata for all question sets. This can only be performed by a non-privileged user.
+
+The server expects the following GET parameters:
+
+- `token`: The login token associated with the current session, e.g. `12345678`
+
+The server may return any of the following status codes or 5xx on error:
+
+- `200 OK`
+- `400 Bad Request`
+- `403 Forbidden`
+- `404 Not Found`
+
+#### `200 OK`
+
+The requested operation was successful. The server returns an array of objects, each containing the following fields:
+
+- `"id"`: The ID number associated with the question set, e.g. `17`
+- `"owner"`: The human-readable name of the privileged user owning this question set, e.g. `"John Doe"`
+- `"graded"`: A boolean value indicating whether the question set is graded
+- `"deadline"`: The deadline for the question set in `yyyy-mm-dd` format if the set is graded, e.g. `"2021-12-31"`. This field is only present for graded question sets
+- `"timeLimit"`: The time limit for the question set in seconds, e.g. `300`
+
+#### `400 Bad Request`
+
+The request was malformed, e.g. the supplied token is invalid. The server should return a JSON payload containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The supplied login token is invalid"`
+
+#### `403 Forbidden`
+
+A privileged user attempted to perform this operation. It is acceptable to return `404 Not Found` instead in this case to conceal sensitive information from potential attackers.
+
+The server should return a JSON payload containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"Teachers are not allowed to browse all question sets"`
+
+#### `404 Not Found`
+
+Any other user error. The server should return a JSON payload containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The requested resource was not found"`
