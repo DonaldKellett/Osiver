@@ -407,3 +407,47 @@ The server should respond with a JSON payload containing the following fields:
 Any other user error. The server should return a JSON payload with the following fields:
 
 - `"message"`: A short description of the error, e.g. `"Question set not found, or insufficient privileges, or invalid operation on question set"`
+
+### `GET /set/manage`
+
+Retrieve metadata on all question sets owned by the user. This is a privileged operation.
+
+The server expects the following query string parameters to be sent along with the GET request:
+
+- `token`: The login token associated with the current session, e.g. `12345678`
+
+The server may return any of the following status codes or 5xx on error:
+
+- `200 OK`
+- `400 Bad Request`
+- `403 Forbidden`
+- `404 Not Found`
+
+#### `200 OK`
+
+The operation was successful. The server should return an array of objects, each containing the following fields:
+
+- `"id"`: The ID number associated with the question set, e.g. `17`
+- `"graded"`: A boolean value indicating whether the question set is graded
+- `"deadline"`: The deadline for the question set in `yyyy-mm-dd` format if the set is graded, e.g. `"2021-12-31"`. This field is only present for graded question sets
+- `"timeLimit"`: The time limit for the question set in seconds, e.g. `300`
+
+#### `400 Bad Request`
+
+The request was malformed, e.g. the supplied token is invalid. The server should return a JSON payload containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The supplied login token is invalid"`
+
+#### `403 Forbidden`
+
+The user does not have sufficient privileges. It is acceptable to return `404 Not Found` instead in this case to conceal sensitive information from potential attackers.
+
+The server should return a JSON payload containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"Students are not allowed to manage question sets"`
+
+#### `404 Not Found`
+
+Any other user error. The server should return a JSON payload containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The requested resource was not found"`
