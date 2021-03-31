@@ -496,3 +496,52 @@ The server should return a JSON payload containing the following fields:
 Any other user error. The server should return a JSON payload containing the following fields:
 
 - `"message"`: A short description of the error, e.g. `"The requested resource was not found"`
+
+### `GET /set/train`
+
+Fetch a problem set to train on. This can only be performed by unprivileged users. Furthermore, this endpoint fails for graded question sets if:
+
+- The user requesting the question set already has a score associated with the set
+- It is already past the deadline of the question set
+
+The server expects the following GET parameters:
+
+- `token`: The login token associated with the current session, e.g. `12345678`
+- `id`: The ID number associated with the question set, e.g. `17`
+
+The server may return any of the following status codes or 5xx on error:
+
+- `200 OK`
+- `400 Bad Request`
+- `403 Forbidden`
+- `404 Not Found`
+
+#### `200 OK`
+
+The requested operation was successful. The server should respond with a JSON payload representing the question set:
+
+- `"title"`: A title describing the nature of the question set, e.g. `"GNU/Linux trivia"`
+- `"description"`: A longer description of what the question set is about, e.g. `"A sample problem set on fun facts about GNU/Linux, used for demonstrating the app only"`
+- `"problems"`: A non-empty array of objects, each with the following fields:
+  - `"question"`: The problem statement, e.g. `"What is Linux?"`
+  - `"answers"`: An array of length 4 where each element is a string representing a possible answer to the question, e.g. `["An operating system kernel", "A fully functioning operating system", "A brand of potato chips", "A top secret project under development by Microsoft"]`. The first item in the array is taken as the correct answer
+
+#### `400 Bad Request`
+
+The request was malformed, e.g. the ID provided was not a whole number. The server should return a JSON payload containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The ID provided was not a whole number"`
+
+#### `403 Forbidden`
+
+A privileged user attempted the operation, the user already has a score associated with the graded question set or the graded question set was requested past its deadline. It is acceptable to return `404 Not Found` instead to conceal sensitive information from potential attackers.
+
+The server should return a JSON payload containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"You requested to train on a graded question set past its deadline"`
+
+#### `404 Not Found`
+
+Any other user error. The server should return a JSON payload containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The requested resource was not found"`
