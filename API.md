@@ -680,3 +680,48 @@ A JSON payload is returned containing the following fields:
 Any other user error. A JSON payload is returned containing the following fields:
 
 - `"message"`: A short description of the error, e.g. `"The requested resource was not found"`
+
+### `GET /score/user`
+
+Fetch a list of scores and associated metadata for the given user and graded question set. This is a privileged operation; moreover, this operation can only be performed on unprivileged users and graded question sets.
+
+The server expects the following GET parameters:
+
+- `token`: The login token associated with the current session, e.g. `12345678`
+- `studentId`: The ID associated with the student, e.g. `37`
+- `questionSetId`: The ID associated with the graded question set, e.g. `17`
+
+The server may return any of the following status codes or 5xx on error:
+
+- `200 OK`
+- `400 Bad Request`
+- `403 Forbidden`
+- `404 Not Found`
+
+#### `200 OK`
+
+The requested operation was successful. An array is returned consisting of objects each with the following fields:
+
+- `"id"`: The ID associated with the given score entry, e.g. `24`
+- `"submitted"`: The date at which the score was submitted in `yyyy-mm-dd` format, e.g. `"2021-04-01"`
+- `"percentage"`: The score as a percentage rounded to the nearest integer, e.g. `75`
+
+#### `400 Bad Request`
+
+The request was malformed. A JSON payload is returned with the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The login token is invalid"`
+
+#### `403 Forbidden`
+
+An unprivileged user attempted the operation, the provided user ID corresponds to a privileged user or the provided question set ID corresponds to an ungraded question set. It is acceptable to return `404 Not Found` instead in this case to conceal sensitive information from the attacker.
+
+A JSON payload is returned with the following fields:
+
+- `"message"`: A short description of the error, e.g. `"Cannot obtain the scores for a teacher"`
+
+#### `404 Not Found`
+
+Any other user error. A JSON payload is returned with the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The requested resource was not found"`
