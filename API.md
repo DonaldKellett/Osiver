@@ -593,3 +593,45 @@ A JSON payload should be returned with the following fields:
 Any other user error. A JSON payload should be returned with the following fields:
 
 - `"message"`: A short description of the error, e.g. `"The requested resource was not found"`
+
+### `GET /score/mine`
+
+Fetch a list of scores and their metadata of the logged in user for a particular question set. This operation can only be performed by a non-privileged user. The server expects the following GET parameters:
+
+- `token`: The login token associated with the current session, e.g. `12345678`
+- `questionSetId`: The ID associated with the question set for which to fetch the scores associated with this user, e.g. `17`
+
+The server may respond with any of the following status codes or 5xx on error:
+
+- `200 OK`
+- `400 Bad Request`
+- `403 Forbidden`
+- `404 Not Found`
+
+#### `200 OK`
+
+The requested operation was successful. An array is returned consisting of objects each containing the following fields:
+
+- `"id"`: The ID associated with the score entry, e.g. `24`
+- `"submitted"`: The date at which the score entry was submitted in `yyyy-mm-dd` format, e.g. `"2021-04-01"`
+- `"percentage"`: The score as a percentage rounded to the nearest integer, e.g. `75`
+
+#### `400 Bad Request`
+
+The request was malformed, e.g. the login token is invalid. A JSON payload is returned containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The login token supplied was invalid"`
+
+#### `403 Forbidden`
+
+The operation was attempted by a privileged user. It is acceptable to return `404 Not Found` instead in this case to conceal sensitive information from potential attackers.
+
+The server should return a JSON payload with the following fields:
+
+- `"message"`: A short description of the error, e.g. `"Teachers cannot view their own scores associated with question sets"`
+
+#### `404 Not Found`
+
+Any other user error. The server should return a JSON payload with the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The requested resource was not found"`
