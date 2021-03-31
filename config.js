@@ -2,8 +2,10 @@
 
 const path = require('path')
 const fs = require('fs')
+const moment = require('moment')
 
 const OSIVER_CONF_BASE = process.env.OSIVER_CONF_BASE || path.join(__dirname, 'config')
+const OSIVER_DATA_BASE = process.env.OSIVER_DATA_BASE || path.join(__dirname, 'data')
 try {
   const NAME = 'Osiver'
   const VERSION = '0.1.0'
@@ -32,6 +34,7 @@ try {
     DB_PW,
     MASTER_PW,
     JWT_SECRET,
+    OSIVER_DATA_BASE,
     VALID_USERNAME,
     SALT_ROUNDS
   }
