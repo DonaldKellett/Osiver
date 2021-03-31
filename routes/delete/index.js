@@ -5,6 +5,8 @@ const mysql = require('mysql-await')
 // Temporary workaround for broken connection.escape() in mysql-await
 const { escape } = require('mysql')
 const bcrypt = require('bcrypt')
+const fs = require('fs').promises
+const path = require('path')
 const config = require('../../config')
 
 const bodyJsonSchema = S.object()
@@ -46,6 +48,17 @@ module.exports = async function (fastify, opts) {
       if (masterPassword)
         if (masterPassword !== config.MASTER_PW)
           return reply.status(404).send({ message: 'The password supplied was incorrect or the account with the supplied username was not found' })
+      if (user.privileged) {
+        let questionSetIds = await connection.awaitQuery(`SELECT id FROM QuestionSets WHERE teacherId = ${user.id}`)
+	questionSetIds = questionSetIds.map(({ id }) => id)
+	for (let questionSetId of questionSetIds) {
+	  await connection.awaitQuery(`DELETE FROM Scores WHERE questionSetId = ${questionSetId}`)
+          await fs.unlink(path.join(config.OSIVER_DATA_BASE, `${questionSetId}.json`))
+          await connection.awaitQuery(`DELETE FROM QuestionSets WHERE id = ${questionSetId}`)
+	}
+      } else {
+	await connection.awaitQuery(`DELETE FROM Scores WHERE studentId = ${user.id}`)
+      }
       await connection.awaitQuery(`DELETE FROM Accounts WHERE username = ${escape(username)}`)
       await connection.awaitEnd()
       return reply.status(204).send()
