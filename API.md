@@ -635,3 +635,48 @@ The server should return a JSON payload with the following fields:
 Any other user error. The server should return a JSON payload with the following fields:
 
 - `"message"`: A short description of the error, e.g. `"The requested resource was not found"`
+
+### `GET /score/top3`
+
+Get the top 3 high scores (if available) computed for all users associated with a given problem set. This operation can only be performed by a non-privileged user.
+
+The server expects the following GET parameters:
+
+- `token`: The login token associated with the current session, e.g. `12345678`
+- `questionSetId`: The ID associated with the question set, e.g. `17`
+
+The server may return any of the following status codes, or 5xx on error:
+
+- `200 OK`
+- `400 Bad Request`
+- `403 Forbidden`
+- `404 Not Found`
+
+#### `200 OK`
+
+The requested operation was successful. An array of length at most 3 is returned consisting of objects each containing the following fields:
+
+- `"id"`: The ID associated with the score entry, e.g. `24`
+- `"studentName"`: The human-readable name of the student associated with the score entry, e.g. `"John Doe"`
+- `"submitted"`: The date at which the score was submitted in `yyyy-mm-dd` format, e.g. `"2021-04-01"`
+- `"percentage"`: The score as a percentage rounded to the nearest integer, e.g. `75`
+
+#### `400 Bad Request`
+
+The request was malformed. A JSON payload is returned containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The provided questionSetID was not a valid whole number"`
+
+#### `403 Forbidden`
+
+A privileged user attempted the operation. It is acceptable to return `404 Not Found` instead in this case to conceal sensitive information from potential attackers.
+
+A JSON payload is returned containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"Teachers are not allowed to view global high scores for a given problem set"`
+
+#### `404 Not Found`
+
+Any other user error. A JSON payload is returned containing the following fields:
+
+- `"message"`: A short description of the error, e.g. `"The requested resource was not found"`
