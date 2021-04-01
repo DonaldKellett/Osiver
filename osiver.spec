@@ -3,7 +3,7 @@
 Name: osiver
 Version: %{version}
 Release: 1%{?dist}
-Summary: Minimal example of authentication server with two tiers of users
+Summary: Backend server for the Reviso mobile application
 License: GPLv3+
 URL: https://github.com/DonaldKellett/Osiver
 Source0: https://github.com/DonaldKellett/Osiver/archive/refs/tags/v%{version}.tar.gz
@@ -11,15 +11,19 @@ BuildArch: noarch
 Requires: nodejs mariadb-server python3
 
 %description
-A minimal example of an authentication server for two tiers of users:
+Reviso is a mobile application allowing students to achieve
+mastery through repetition by training on question sets and
+track their own progress over time, as well as allowing
+teachers to track students' progress and create graded
+question sets to assess students' abilities. Osiver is the
+backend server API for Reviso, featuring two types of users:
 
-- "Privileged" users that can only be created with a master password
-- "Unprivileged" users that can sign up freely
+- Teachers responsible for creating question sets
+- Students responsible for training on question sets
 
-Of course, it is not a hard requirement that "privileged" users have
-more rights than "unprivileged" ones, but the idea is that one should
-not be able to randomly sign up for a "privileged" account which may
-somehow be considered more important than an "unprivileged" one.
+Students can freely sign up for an account, while teachers
+can only sign up for an account with proper authorization
+from the server administrator through a master password.
 
 %prep
 %setup -q -n Osiver-%{version}
@@ -31,6 +35,7 @@ cp package-lock.json %{buildroot}/%{_datadir}/osiver/package-lock.json
 cp config.js %{buildroot}/%{_datadir}/osiver/config.js
 cp app.js %{buildroot}/%{_datadir}/osiver/app.js
 cp LICENSE %{buildroot}/%{_datadir}/osiver/LICENSE
+cp README.md %{buildroot}/%{_datadir}/osiver/README.md
 cp API.md %{buildroot}/%{_datadir}/osiver/API.md
 mkdir -p %{buildroot}/%{_datadir}/osiver/routes
 cp routes/root.js %{buildroot}/%{_datadir}/osiver/routes/root.js
@@ -44,6 +49,31 @@ mkdir -p %{buildroot}/%{_datadir}/osiver/routes/login
 cp routes/login/index.js %{buildroot}/%{_datadir}/osiver/routes/login/index.js
 mkdir -p %{buildroot}/%{_datadir}/osiver/routes/delete
 cp routes/delete/index.js %{buildroot}/%{_datadir}/osiver/routes/delete/index.js
+mkdir -p %{buildroot}/%{_datadir}/osiver/routes/profile
+cp routes/profile/index.js %{buildroot}/%{_datadir}/osiver/routes/profile/index.js
+mkdir -p %{buildroot}/%{_datadir}/osiver/routes/users
+cp routes/users/index.js %{buildroot}/%{_datadir}/osiver/routes/users/index.js
+mkdir -p %{buildroot}/%{_datadir}/osiver/routes/set/create
+cp routes/set/create/index.js %{buildroot}/%{_datadir}/osiver/routes/set/create/index.js
+mkdir -p %{buildroot}/%{_datadir}/osiver/routes/set/delete
+cp routes/set/delete/index.js %{buildroot}/%{_datadir}/osiver/routes/set/delete/index.js
+mkdir -p %{buildroot}/%{_datadir}/osiver/routes/set/modify
+cp routes/set/modify/index.js %{buildroot}/%{_datadir}/osiver/routes/set/modify/index.js
+mkdir -p %{buildroot}/%{_datadir}/osiver/routes/set/manage
+cp routes/set/manage/index.js %{buildroot}/%{_datadir}/osiver/routes/set/manage/index.js
+mkdir -p %{buildroot}/%{_datadir}/osiver/routes/set/browse
+cp routes/set/browse/index.js %{buildroot}/%{_datadir}/osiver/routes/set/browse/index.js
+mkdir -p %{buildroot}/%{_datadir}/osiver/routes/set/train
+cp routes/set/train/index.js %{buildroot}/%{_datadir}/osiver/routes/set/train/index.js
+mkdir -p %{buildroot}/%{_datadir}/osiver/routes/score/submit
+cp routes/score/submit/index.js %{buildroot}/%{_datadir}/osiver/routes/score/submit/index.js
+mkdir -p %{buildroot}/%{_datadir}/osiver/routes/score/mine
+cp routes/score/mine/index.js %{buildroot}/%{_datadir}/osiver/routes/score/mine/index.js
+mkdir -p %{buildroot}/%{_datadir}/osiver/routes/score/top3
+cp routes/score/top3/index.js %{buildroot}/%{_datadir}/osiver/routes/score/top3/index.js
+mkdir -p %{buildroot}/%{_datadir}/osiver/routes/score/user
+cp routes/score/user/index.js %{buildroot}/%{_datadir}/osiver/routes/score/user/index.js
+mkdir -p %{buildroot}/%{_sharedstatedir}/osiver
 mkdir -p %{buildroot}/%{_datadir}/osiver/plugins
 cp plugins/support.js %{buildroot}/%{_datadir}/osiver/plugins/support.js
 cp plugins/sensible.js %{buildroot}/%{_datadir}/osiver/plugins/sensible.js
@@ -80,7 +110,7 @@ if [ \$# -eq 0 ]; then
     exit 1
   fi
   cd %{_datadir}/osiver
-  OSIVER_CONF_BASE=%{_sysconfdir}/osiver PORT=80 npm start
+  OSIVER_CONF_BASE=%{_sysconfdir}/osiver OSIVER_DATA_BASE=%{_sharedstatedir}/osiver PORT=80 npm start
   exit
 fi
 
@@ -119,7 +149,7 @@ mkdir -p %{buildroot}/%{_bindir}
 install -m 755 osiver.sh %{buildroot}/%{_bindir}/osiver
 cat > osiver.service << EOF
 [Unit]
-Description=Osiver - Minimal example of authentication server with two tiers of users
+Description=Osiver - Backend server for the Reviso mobile application
 Documentation=https://github.com/DonaldKellett/Osiver
 Wants=mariadb.service
 After=mariadb.service
@@ -140,6 +170,7 @@ cp osiver.service %{buildroot}/usr/lib/systemd/system/osiver.service
 %{_datadir}/osiver/config.js
 %{_datadir}/osiver/app.js
 %license %{_datadir}/osiver/LICENSE
+%doc %{_datadir}/osiver/README.md
 %{_datadir}/osiver/API.md
 %{_datadir}/osiver/routes/root.js
 %{_datadir}/osiver/routes/signup/index.js
@@ -147,17 +178,30 @@ cp osiver.service %{buildroot}/usr/lib/systemd/system/osiver.service
 %{_datadir}/osiver/routes/logout/index.js
 %{_datadir}/osiver/routes/login/index.js
 %{_datadir}/osiver/routes/delete/index.js
+%{_datadir}/osiver/routes/profile/index.js
+%{_datadir}/osiver/routes/users/index.js
+%{_datadir}/osiver/routes/set/create/index.js
+%{_datadir}/osiver/routes/set/delete/index.js
+%{_datadir}/osiver/routes/set/modify/index.js
+%{_datadir}/osiver/routes/set/manage/index.js
+%{_datadir}/osiver/routes/set/browse/index.js
+%{_datadir}/osiver/routes/set/train/index.js
+%{_datadir}/osiver/routes/score/submit/index.js
+%{_datadir}/osiver/routes/score/mine/index.js
+%{_datadir}/osiver/routes/score/top3/index.js
+%{_datadir}/osiver/routes/score/user/index.js
+%{_sharedstatedir}/osiver
 %{_datadir}/osiver/plugins/support.js
 %{_datadir}/osiver/plugins/sensible.js
-%{_sysconfdir}/osiver/timeout
-%{_sysconfdir}/osiver/master-pw
-%{_sysconfdir}/osiver/jwt-secret
-%{_sysconfdir}/osiver/db-pw
-%{_sysconfdir}/osiver/db-host
+%config(noreplace) %{_sysconfdir}/osiver/timeout
+%config(noreplace) %{_sysconfdir}/osiver/master-pw
+%config(noreplace) %{_sysconfdir}/osiver/jwt-secret
+%config(noreplace) %{_sysconfdir}/osiver/db-pw
+%config(noreplace) %{_sysconfdir}/osiver/db-host
 %{_datadir}/osiver/osiver.sql
 %{_bindir}/osiver
 /usr/lib/systemd/system/osiver.service
 
 %changelog
-* Sun Mar 28 2021 Donald Sebastian Leung <donaldsebleung@gmail.com> - 0.1.0-1
+* Thu Apr 01 2021 Donald Sebastian Leung <donaldsebleung@gmail.com> - 0.1.0-1
 - First osiver package
