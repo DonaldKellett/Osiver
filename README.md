@@ -60,7 +60,7 @@ If using the provided binary RPM `osiver-0.1.0-1.el8.noarch.rpm` (Linux only, on
 1. (Recommended) Run suitable queries on the MySQL server to change the password for the MySQL `osiver` user (default: `P@ssw0rd`) and update `/etc/osiver/db-pw` accordingly to instruct the Web server to connect to the database server using this new password
 1. (Recommended) Edit `/etc/osiver/jwt-secret` and `/etc/osiver/master-pw` accordingly to set a new JWT secret and master password respectively
 1. (Optional) Edit `/etc/osiver/timeout` to modify the login timeout for users
-1. Start the Osiv web service as root: `$ sudo systemctl start osiver`
+1. Start the Osiver web service as root: `$ sudo systemctl start osiver`
 1. Enjoy :-)
 
 ## Known Issues
