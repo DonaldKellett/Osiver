@@ -44,7 +44,7 @@ The behavior of the Web server can be further configured via three environment v
 
 ### Using the provided RPM
 
-If using the provided binary RPM `osiver-0.1.0-1.el8.noarch.rpm` (Linux only, only tested on CentOS 8 Stream):
+If using the provided binary RPM `osiver-0.1.0-1.el8.noarch.rpm` (only tested on CentOS 8 Stream):
 
 1. Download the RPM package to your (Red Hat-based) Linux system
 1. Install from the package: `$ sudo dnf install /path/to/your/osiver-0.1.0-1.el8.noarch.rpm`
@@ -62,6 +62,10 @@ If using the provided binary RPM `osiver-0.1.0-1.el8.noarch.rpm` (Linux only, on
 1. (Optional) Edit `/etc/osiver/timeout` to modify the login timeout for users
 1. Start the Osiver web service as root: `$ sudo systemctl start osiver`
 1. Enjoy :-)
+
+### Using the provided deb
+
+If using the provided deb `osiver_0.1.0_all.deb` (only tested on Ubuntu 20.04 server), follow the same steps as with the RPM except replace the dnf installation command in step 2 with the APT equivalent: `$ sudo apt install /path/to/your/osiver_0.1.0_all.deb`
 
 ## Known Issues
 
