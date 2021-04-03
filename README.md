@@ -66,6 +66,7 @@ If using the provided binary RPM `osiver-0.1.0-1.el8.noarch.rpm` (Linux only, on
 ## Known Issues
 
 - The `GET /logout` endpoint does not actually invalidate the JWT login token since JWT tokens cannot be invalidated and maintaining a blacklist of invalidated tokens in-memory violates the REST principle. This should not pose a major security risk as long as the client discards the login token on logout and prevents it from leaking to untrusted third parties before the token expires. But then, Osiver is not meant for production use out-of-the-box anyway since it uses HTTP by default instead of HTTPS, voiding any and all security guarantees (-:
+- For the RPM and deb versions, running `$ sudo osiver --init` as a regular user belonging to the `wheel`/`sudo` group fails with a permission denied error during the `npm install` stage. This has probably something to do with real vs. effective UID but the exact cause is yet to be determined
 
 ## Credits
 
