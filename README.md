@@ -1,6 +1,6 @@
 # Osiver
 
-Backend server for the Reviso mobile application
+Backend server for the [Reviso](https://github.com/ashrestha1/Reviso) mobile application
 
 ## Overview
 
